@@ -2,8 +2,8 @@ CC=g++
 WARN=-Wall
 TYP=c++17
 
-btreemake: main.o btree.o llist.o
-	$(CC) $(WARN) -std=$(TYP) -o btree_test.exe main.o btree.o llist.o
+btreemake: main.o btree.o
+	$(CC) $(WARN) -std=$(TYP) -o btree_test.exe main.o btree.o
 
 .PHONY: clean
 

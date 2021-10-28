@@ -17,14 +17,11 @@ class llist {
         ~llist();
 
         //list specific operations
-        int insert_item(T value);
-        int where_to_insert(T value);
+        int insert_item(T x);
+        int where_to_insert(T x);
         T search_by_index(int index); //returns the key's value
-        void remove(T value);
-        // void remove_last();
-        int contains(T value);
+        void remove(T x);
         void print_list(); // maybe replace with
-        int length();
         //friend wostream& operator<< <T>(wostream& os, llist<T>& ll)
 
     private:
@@ -35,15 +32,12 @@ class llist {
             T value;
             lnode* next;
         };
-        int length_rec(lnode* head);
         void print_list_rec(lnode* head);
-        int insert_item_rec(T value, lnode* head, int index);
-        int where_to_insert_item_rec(T value, lnode* head, int index);
-        int contains_rec(T value, lnode* head, int index);
+        int insert_item_rec(T x, lnode* head, int index);
+        int where_to_insert_item_rec(T x, lnode* head, int index);
         void teardown(lnode* head); //for the deconstructor
-        lnode* search(T value);
-        lnode* head;
-        lnode* tail;
+        lnode* search(T x);
+        lnode* head;        
 };
 
 template <class T>
@@ -53,7 +47,6 @@ llist<T>::llist()
     head->prev = NULL;
     //head->value = 0;
     head->next = NULL;
-    tail = head; 
 }
 
 template <class T>
@@ -82,31 +75,10 @@ void llist<T>::print_list()
 template <class T>
 void llist<T>::print_list_rec(lnode* head)
 {
-    if (head->next != NULL) 
-    {
+    if (head->next != NULL) {
         std::cout << head->next->value << ' ';
         print_list_rec(head->next);
     }
-}
-
-template <class T>
-int llist<T>::length()
-{
-    return length_rec(head);
-}
-
-template <class T>
-int llist<T>::length_rec(lnode* head)
-{
-    if (head->next != NULL) 
-    {
-        return length_rec(head->next) + 1;
-    } 
-    else 
-    {
-        return 0;
-    }
-
 }
 
 template <class T>
@@ -126,7 +98,6 @@ int llist<T>::insert_item_rec(T value, lnode* head, int index)
         new_node->prev = current;
         new_node->value = value;
         new_node->next = NULL;
-        tail = new_node;
         return index;
     }
     if (current->next->value >= value) //new node inserted before next node
@@ -142,28 +113,6 @@ int llist<T>::insert_item_rec(T value, lnode* head, int index)
     }
     return insert_item_rec(value, current->next, index+1);
 }
-
-template <class T>
-int llist<T>::contains(T value)
-{
-    return contains_rec(value, head, 0);
-}
-
-template <class T>
-int llist<T>::contains_rec(T value, lnode* head, int index)
-{
-    lnode* current = head;
-    if (current->next == NULL) //new last node
-    {
-        return -1;
-    }
-    if (current->next->value == value) //new node inserted before next node
-    {
-        return index;
-    }
-    return contains_rec(value, current->next, index+1);
-}
-
 
 template <class T>
 int llist<T>::where_to_insert(T value)
@@ -229,10 +178,9 @@ void llist<T>::remove(T value)
     lnode* to_remove = search(value);
     if (to_remove != NULL)
     {
-        if (to_remove->next == NULL) // removing last node in list
+        if (to_remove->next == NULL)
         {
             to_remove->prev->next = NULL;
-            tail = to_remove->prev;
         } 
         else
         {
@@ -243,13 +191,5 @@ void llist<T>::remove(T value)
     }
 }
 
-// template <class T>
-// void llist<T>::remove_last()
-// {
-//     lnode* to_remove = tail;
-//     to_remove->prev->next = NULL;
-//     tail = to_remove->prev;
-//     free(to_remove);
-// }
 
 #endif
